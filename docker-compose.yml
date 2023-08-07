@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  openresty:
+    container_name: openresty
+    build: openresty
+    volumes:
+      - ./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+    ports:
+      - "8080:8080"
+    networks:
+      - my-network
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:22.0.1
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8081:8080
+    volumes:
+      - ./data:/opt/keycloak/data
+    networks:
+      - my-network
+
+networks:
+  my-network:
